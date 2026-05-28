@@ -38,7 +38,7 @@ def inject_noise(payload):
 def main():
     df = pd.read_csv(CSV_PATH)
     df = df.sort_values('timestamp').reset_index(drop=True)
-    df = df.tail(60)  # 가장 최근 60건만
+    df = df.head(40)  # 가장 최근 40건만
     df = df.reset_index(drop=True)
 
     client = IoTHubDeviceClient.create_from_connection_string(CONNECTION_STRING)
@@ -55,7 +55,9 @@ def main():
                 "humidity": float(row['humidity']),
                 "pressure": float(row['pressure']),
                 "energy_consumption": float(row['energy_consumption']),
-                "machine_status": int(row['machine_status'])
+                "machine_status": int(row['machine_status']),
+                "predicted_remaining_life": float(row['predicted_remaining_life']),
+                "failure_type": str(row['failure_type'])
             }
 
             payload = inject_noise(payload)
